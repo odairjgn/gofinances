@@ -25,8 +25,6 @@ function AuthProvider({ children }: AuthProviderProps) {
         email: 'didi@moco.com'
     };
 
-    //Id Client: 593288134816-vjk7t3nldnkrcgo295ki2o0lg0po59fv.apps.googleusercontent.com
-    //Chave: locvLjI0e5HXBMobOz0R6u9L
 
     return (
         <AuthContext.Provider value={{ user }}>
