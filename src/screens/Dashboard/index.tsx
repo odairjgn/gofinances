@@ -8,6 +8,7 @@ import { useTheme } from 'styled-components/native';
 import { Button } from '../../components/Form/Button';
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
+import { useAuth } from '../../hooks/auth';
 import {
     Container,
     Header,
@@ -47,6 +48,7 @@ export function Dashboard() {
     const [highLigthData, setHighLigthData] = useState<HighLigthData>({} as HighLigthData);
 
     const theme = useTheme();
+    const { signOut, user } = useAuth();
 
     function getLastTransactionDate(
         collection: DataListProps[],
@@ -160,14 +162,14 @@ export function Dashboard() {
                             <UserWrapper>
                                 <UserInfo>
                                     <Photo
-                                        source={{ uri: 'https://avatars.githubusercontent.com/u/26652713?v=4' }}
+                                        source={{ uri: user.photo }}
                                     />
                                     <User>
                                         <UserGreeting>Olá, </UserGreeting>
-                                        <UserName>Marilene</UserName>
+                                        <UserName>{user.name}</UserName>
                                     </User>
                                 </UserInfo>
-                                <LogoutButton onPress={() => { }}>
+                                <LogoutButton onPress={signOut}>
                                     <Icon name='power' />
                                 </LogoutButton>
                             </UserWrapper>
