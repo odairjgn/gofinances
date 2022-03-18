@@ -3,9 +3,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { useTheme } from 'styled-components/native';
-import { Button } from '../../components/Form/Button';
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
 import { useAuth } from '../../hooks/auth';
@@ -223,3 +222,4 @@ export function Dashboard() {
         </Container>
     )
 }
+
