@@ -58,4 +58,17 @@ describe("Login testes", () => {
 
     expect(result.current.user).not.toHaveProperty("id");
   });
+
+  it("should be error signin with Google", async () => {
+    const { result, waitForNextUpdate } = renderHook(() => useAuth(), {
+      wrapper: AuthProvider,
+    });
+
+    try {
+      act(async () => await result.current.signInWithGoogle());
+      await waitForNextUpdate();
+    } catch {
+      expect(result.current.user).toEqual({});
+    }
+  });
 });
