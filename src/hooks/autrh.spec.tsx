@@ -10,35 +10,52 @@ jest.mock("expo-auth-session");
 
 //Coloque no inicio do arquivo para habilitar o mock do fetch.
 fetchMock.enableMocks();
-it("should be able to sign in with Google account existing", async () => {
-  //Primeiro, nós precisamos do Token. Então, vamos Mockar a função de startAsync.
-  const googleMocked = mocked(startAsync as any);
-  googleMocked.mockReturnValueOnce({
-    type: "success",
-    params: {
-      access_token: "any_token",
-    },
+describe("Login testes", () => {
+  it("should be able to sign in with Google account existing", async () => {
+    //Primeiro, nós precisamos do Token. Então, vamos Mockar a função de startAsync.
+    const googleMocked = mocked(startAsync as any);
+    googleMocked.mockReturnValueOnce({
+      type: "success",
+      params: {
+        access_token: "any_token",
+      },
+    });
+
+    //Agora que temos o Token, vamos mockar a requisição ttp dos dados de profile do usuário.
+    fetchMock.mockResponseOnce(
+      JSON.stringify({
+        id: "any_id",
+        email: "rodrigo.goncalves@rocketseat.team",
+        name: "Rodrigo",
+        photo: "any_photo.png",
+      })
+    );
+
+    const { result, waitForNextUpdate } = renderHook(() => useAuth(), {
+      wrapper: AuthProvider,
+    });
+
+    act(async () => await result.current.signInWithGoogle());
+    await waitForNextUpdate();
+
+    expect(result.current.user.email).toBe("rodrigo.goncalves@rocketseat.team");
   });
 
-  //Agora que temos o Token, vamos mockar a requisição ttp dos dados de profile do usuário.
-  fetchMock.mockResponseOnce(
-    JSON.stringify({
-      id: "any_id",
-      email: "rodrigo.goncalves@rocketseat.team",
-      name: "Rodrigo",
-      photo: "any_photo.png",
-    })
-  );
+  it("user should not connect if cancel authentication with Google", async () => {
+    const googleMocked = mocked(startAsync as any);
+    googleMocked.mockReturnValueOnce({
+      type: "cancel",
+    });
 
-  const { result, waitForNextUpdate } = renderHook(() => useAuth(), {
-    wrapper: AuthProvider,
+    fetchMock.mockResponseOnce(JSON.stringify(null));
+
+    const { result, waitForNextUpdate } = renderHook(() => useAuth(), {
+      wrapper: AuthProvider,
+    });
+
+    act(async () => await result.current.signInWithGoogle());
+    await waitForNextUpdate();
+
+    expect(result.current.user).not.toHaveProperty("id");
   });
-
-  act(async () => await result.current.signInWithGoogle());
-  await waitForNextUpdate();
-
-  // Você até pode usar esse console.log para visualizar os dados.
-  console.log("USER PROFILE =>", result.current.user);
-
-  expect(result.current.user.email).toBe("rodrigo.goncalves@rocketseat.team");
 });
