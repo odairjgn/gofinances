@@ -8,6 +8,13 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
-  }
+    ],
+    "description": ""
+  },
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#000000"
+  },
+  "icon": "./assets/icon.png"
 }
